@@ -227,12 +227,16 @@
         StateHasChanged();
         try
         {
-            // Default to Singapore centre - real geocoding requires Google Maps API
-            double lat = 1.3521;
-            double lng = 103.8198;
-            _searchLat = lat;
-            _searchLng = lng;
-            await FetchResultsAsync(lat, lng);
+            var resolved = SingaporePlacesLookup.TryResolve(_searchQuery);
+            if (resolved is null)
+            {
+                // Fall back to Singapore centre and inform the user
+                _errorMessage = $"Could not find \"{_searchQuery}\". Showing results near Singapore centre. Try: Tampines, Bugis, Toa Payoh, Jurong East, etc.";
+                resolved = (1.3521, 103.8198);
+            }
+            _searchLat = resolved.Value.Lat;
+            _searchLng = resolved.Value.Lng;
+            await FetchResultsAsync(_searchLat.Value, _searchLng.Value);
         }
         catch (Exception ex)
         {
@@ -251,10 +255,12 @@
         StateHasChanged();
         try
         {
+            // Browser geolocation requires JS interop; default to Singapore centre
             double lat = 1.3521;
             double lng = 103.8198;
             _searchLat = lat;
             _searchLng = lng;
+            _errorMessage = "Browser geolocation requires JavaScript interop (not yet wired). Showing results near Singapore centre.";
             await FetchResultsAsync(lat, lng);
         }
         catch (Exception ex)

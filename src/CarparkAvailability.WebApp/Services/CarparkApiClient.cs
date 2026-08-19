@@ -19,7 +19,7 @@ public sealed class CarparkApiClient(HttpClient httpClient)
         if (availableOnly) sb.Append("&availableOnly=true");
         if (freeParking == true) sb.Append("&freeParking=true");
         if (nightParking == true) sb.Append("&nightParking=true");
-        if (!string.IsNullOrWhiteSpace(vehicleType)) sb.Append($"&vehicleType={vehicleType}");
+        if (!string.IsNullOrWhiteSpace(vehicleType)) sb.Append($"&vehicleType={Uri.EscapeDataString(vehicleType!)}");
 
         return await httpClient.GetFromJsonAsync<List<CarparkSummary>>(sb.ToString(), cancellationToken);
     }

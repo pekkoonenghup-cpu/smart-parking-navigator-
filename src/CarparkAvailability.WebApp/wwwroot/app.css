@@ -39,7 +39,7 @@ body { background: var(--bg); color: var(--text); margin: 0; font-size: 14px; }
     padding: .5rem 1rem;
 }
 
-.search-bar form { display: flex; gap: .5rem; }
+.search-bar form, .search-form { display: flex; gap: .5rem; }
 
 .search-input {
     flex: 1;

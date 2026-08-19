@@ -8,19 +8,26 @@ public sealed class DataGovSgClient(HttpClient httpClient, IConfiguration config
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
+    private string? ApiKey
+    {
+        get
+        {
+            string? key = configuration["DataGovSg:ApiKey"];
+            return !string.IsNullOrWhiteSpace(key) && !key.StartsWith("{{", StringComparison.Ordinal)
+                ? key : null;
+        }
+    }
+
     public async Task<DataGovSgResponse?> GetCarparkAvailabilityAsync(CancellationToken cancellationToken = default)
     {
-        string? apiKey = configuration["DataGovSg:ApiKey"];
-        if (!string.IsNullOrWhiteSpace(apiKey) &&
-            !apiKey.StartsWith("{{", StringComparison.Ordinal))
-        {
-            httpClient.DefaultRequestHeaders.Remove("x-api-key");
-            httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
-        }
-
         try
         {
-            using var response = await httpClient.GetAsync("transport/carpark-availability", cancellationToken);
+            using var request = new HttpRequestMessage(HttpMethod.Get, "transport/carpark-availability");
+            string? apiKey = ApiKey;
+            if (apiKey is not null)
+                request.Headers.Add("x-api-key", apiKey);
+
+            using var response = await httpClient.SendAsync(request, cancellationToken);
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStreamAsync(cancellationToken);
             return await JsonSerializer.DeserializeAsync<DataGovSgResponse>(content, JsonOptions, cancellationToken);
