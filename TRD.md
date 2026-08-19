@@ -3,9 +3,9 @@
 | Field        | Value                              |
 |--------------|------------------------------------|
 | Version      | 1.0.0                              |
-| Status       | Draft                              |
+| Status       | Approved                           |
 | Author       | @copilot                           |
-| Reviewed by  | —                                  |
+| Reviewed by  | @pekkoonenghup-cpu                 |
 | Created      | 2026-08-19                         |
 | Last updated | 2026-08-19                         |
 | Issue        | #2                                 |
