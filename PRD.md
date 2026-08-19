@@ -184,7 +184,7 @@ The following acceptance criteria define "done" for the MVP.  Each must pass bef
 - Given the user selects a result, the map pans to that location within 1 second on a standard desktop browser.
 
 ### AC-02 Nearby car parks displayed
-- Given a destination is selected, all HDB car parks within 500 m (Euclidean distance in WGS84) are shown on the map and in the list.
+- Given a destination is selected, all HDB car parks within 500 m (Haversine distance in WGS84) are shown on the map and in the list.
 - Given a destination with no HDB car parks within 500 m, an appropriate empty-state message is displayed.
 
 ### AC-03 Live availability shown
